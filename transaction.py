@@ -3,7 +3,6 @@ import scipy
 from scipy import stats
 import numpy as np
 
-
 file = open("transaction.txt", "r")
 
 # загрузим данные из файла в массив строк data_af и data_r соттветственно
@@ -20,6 +19,7 @@ for line in file:
         data_r += line.split(",")
 print(data_af)
 print(data_r)
+
 # количество клиентов, совершивших транзакции в определенном секторе
 # подсчитаем количество уникальных ID, так как некоторые клиенты могли совершать
 # транзакции не один раз
