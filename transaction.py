@@ -3,12 +3,11 @@ import scipy
 from scipy import stats
 import numpy as np
 
-
 file = open("transaction.txt", "r")
 
 # загрузим данные из файла в массив строк data_af и data_r соттветственно
+# если можем выгрузить файл в оперативную память, если нет - смотреть big_data_processing.py
 
-# если можем выгрузить файл в оперативную память - раскоментировать
 data_af = []
 data_r = []
 for line in file:
@@ -18,8 +17,7 @@ for line in file:
         data_af += line.split(",")
     else:
         data_r += line.split(",")
-print(data_af)
-print(data_r)
+
 # количество клиентов, совершивших транзакции в определенном секторе
 # подсчитаем количество уникальных ID, так как некоторые клиенты могли совершать
 # транзакции не один раз
@@ -88,10 +86,13 @@ sq_dispersion_value_r = sqrt(dispersion_value(data_r, expected_value_r))
 # при известной дисперсии для распределения дискретного типа
 # P = 0.9 = 2Ф(x) => x (из таблицы Лапласса для Ф(x)=0.45) = 0.36
 # x = eps * sqrt(n) / sq_dispersion_value => eps = x * sq_dispersion_value / sqrt(n)
-x = 0.36
 
-print("90% Доверительный интервал значений для AF [0, {:.2f}]".format(sq_dispersion_value_af * x / sqrt(len(data_af)/4)))
-print("90% Доверительный интервал значений для R [0, {:.2f}]".format(sq_dispersion_value_r * x / sqrt(len(data_r)/4)))
+x = 0.36
+meaning_af = sq_dispersion_value_af * x / sqrt(len(data_af)/4)
+meaning_r = sq_dispersion_value_r * x / sqrt(len(data_r)/4)
+
+print("90% Доверительный интервал значений среднего объема для AF [-{:.2f}, {:.2f}]".format(meaning_af, meaning_af))
+print("90% Доверительный интервал значений среднего объема для R [-{:.2f}, {:.2f}]".format(meaning_r, meaning_r))
 
 # проверка математической гипотезы
 # Пусть H0 = {m_r = m_af}, при gamma = 0.1 (уровне значимости = ошибка первого рода)
@@ -122,4 +123,4 @@ u_01 = 1.282
 
 result = theory_h(average_af, X_r, len(data_r)/4, sq_dispersion_value_r, u_01)
 
-print( "Гипотеза о равенстве средних объемов", "верна" if (not result) else "неверна" )
+print("\nГипотеза о равенстве средних объемов", "верна" if (not result) else "неверна" )
