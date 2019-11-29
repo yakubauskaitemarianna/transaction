@@ -3,20 +3,23 @@ import scipy
 from scipy import stats
 import numpy as np
 
+
 file = open("transaction.txt", "r")
 
 # загрузим данные из файла в массив строк data_af и data_r соттветственно
 
+# если можем выгрузить файл в оперативную память - раскоментировать
 data_af = []
 data_r = []
 for line in file:
     if (line[-1] == "\n"):
         line = line[:-1]
-    if "AF" in line:
+    if line[-2:] == "AF":
         data_af += line.split(",")
     else:
         data_r += line.split(",")
-
+print(data_af)
+print(data_r)
 # количество клиентов, совершивших транзакции в определенном секторе
 # подсчитаем количество уникальных ID, так как некоторые клиенты могли совершать
 # транзакции не один раз
@@ -30,7 +33,7 @@ def count_unique_ids(data):
         if  coeff != 1 and (data[i] not in dublicated):
             count += coeff
             dublicated.append(data[i])
-        else:
+        elif coeff == 1 and (data[i] not in dublicated):
             count += 1
     return count
 
